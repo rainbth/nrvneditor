@@ -29,6 +29,11 @@ test("Electron guarda markdown y persiste metadata al reiniciar", async () => {
   };
   const openNote = async (app: Awaited<ReturnType<typeof launch>>) => {
     const page = await app.firstWindow();
+    // En runners de CI la pantalla puede ser menor y los paneles tapan el header.
+    await app.evaluate(({ BrowserWindow }) => {
+      const [win] = BrowserWindow.getAllWindows();
+      win?.setSize(1600, 1000);
+    });
     await expect(page.locator('[data-testid="app-shell"]')).toBeVisible();
     await page
       .getByRole("button", { name: /Abrir carpeta/ })

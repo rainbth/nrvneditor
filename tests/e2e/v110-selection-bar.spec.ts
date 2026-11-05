@@ -40,25 +40,31 @@ async function assertNoUnselectedPaint(page: Page) {
 }
 
 async function expectBridgesMatchRealGap(page: Page) {
-  const differences = await page.evaluate(() => {
-    const blocks = [...document.querySelectorAll<HTMLElement>(".prose .block")];
-    return blocks.flatMap((block) => {
-      const previous = block.previousElementSibling;
-      if (
-        block.dataset.selected !== "true" ||
-        !(previous instanceof HTMLElement) ||
-        previous.dataset.selected !== "true"
-      )
-        return [];
-      const rect = block.getBoundingClientRect();
-      const height = Number.parseFloat(getComputedStyle(block, "::before").height);
-      const bridgeTop = rect.top - height;
-      const expectedTop = previous.getBoundingClientRect().bottom - 22;
-      return [Math.abs(bridgeTop - expectedTop)];
-    });
-  });
-  expect(differences.length).toBeGreaterThan(0);
-  for (const difference of differences) expect(difference).toBeLessThanOrEqual(1.5);
+  // La reserva de la burbuja se anima; en runners lentos tarda más que un timeout fijo.
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          const blocks = [...document.querySelectorAll<HTMLElement>(".prose .block")];
+          const differences = blocks.flatMap((block) => {
+            const previous = block.previousElementSibling;
+            if (
+              block.dataset.selected !== "true" ||
+              !(previous instanceof HTMLElement) ||
+              previous.dataset.selected !== "true"
+            )
+              return [];
+            const rect = block.getBoundingClientRect();
+            const height = Number.parseFloat(getComputedStyle(block, "::before").height);
+            const bridgeTop = rect.top - height;
+            const expectedTop = previous.getBoundingClientRect().bottom - 22;
+            return [Math.abs(bridgeTop - expectedTop)];
+          });
+          return differences.length > 0 && differences.every((d) => d <= 1.5);
+        }),
+      { timeout: 8_000, intervals: [100, 200, 400] },
+    )
+    .toBe(true);
 }
 
 test.describe
