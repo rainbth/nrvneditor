@@ -61,6 +61,9 @@ test("Electron guarda markdown y persiste metadata al reiniciar", async () => {
     await expect(page.locator(".cm-content")).toContainText("editado-en-electron");
     await expect(page.getByTestId("save-state")).toHaveText("Sin guardar");
     await expect(page.getByTestId("save-state")).toHaveText("Guardado", { timeout: 5_000 });
+    // En pantallas pequeñas el panel de agente tapa el header; se oculta para el zoom.
+    const agentToggle = page.getByRole("button", { name: /Mostrar u ocultar agente/ });
+    if ((await agentToggle.getAttribute("aria-pressed")) === "true") await agentToggle.click();
     await page.getByTestId("page-zoom-in").click();
     await expect(page.getByTestId("page-zoom-reset")).toHaveText("110%");
     await page.locator('[role="treeitem"][data-path="otra.md"]').click();

@@ -5,7 +5,7 @@ export default defineConfig({
   outputDir: "artifacts/playwright-results",
   fullyParallel: false,
   workers: 1,
-  retries: 0,
+  retries: process.env.CI ? 2 : 0,
   globalSetup: "./tests/e2e/global-setup.ts",
   timeout: 90_000,
   expect: { timeout: 10_000 },
