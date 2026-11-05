@@ -1,0 +1,253 @@
+/*
+ * Tokens de diseño de nrvn v3. Light por defecto, dark como conjunto completo.
+ * Sin gradientes, sin glassmorphism.
+ *
+ * Las @font-face empaquetadas (Lato) viven en `fonts.css`; Newsreader se
+ * conserva como opción de render (ver `--font-prose-newsreader`).
+ */
+
+:root {
+  /* Orden de capas: base < flotantes < avisos < menús < overlay < modal. */
+  --z-base: 0;
+  --z-floating: 40;
+  /* Avisos por encima de superficies flotantes y por debajo de menús. */
+  --z-notice: 50;
+  --z-menu: 60;
+  --z-overlay: 80;
+  --z-modal: 90;
+  color-scheme: light;
+  --bubble-reserve: 48px;
+  --insert-button: 24px;
+  --insert-line: 4px;
+  --insert-overflow: 8px;
+  --insert-strip: calc(var(--insert-line) + 2px + var(--insert-button) - var(--insert-overflow));
+
+  /* Superficies */
+  --color-bg: #f4f5f5;
+  --color-surface: #fcfcfc;
+  --color-elevated: #ffffff;
+  --color-sunken: #eceeef;
+  /* Papel de la hoja del documento (render y edición). */
+  --color-sheet: #fcfcfc;
+  /* Chrome translucent over macOS under-window vibrancy; alpha is intentional. */
+  --color-chrome: rgba(236, 239, 241, 0.72);
+
+  /* Texto */
+  --color-ink: #202326;
+  --color-ink-secondary: #485056;
+  --color-muted: #656a6f;
+
+  /* Líneas */
+  --color-line: #e1e4e6;
+  --color-chrome-edge: rgba(16, 24, 40, 0.12);
+  /* Bordes de control con ≥3:1 contra surface/bg (WCAG 1.4.11). */
+  --color-line-strong: #848b92;
+
+  /* Acento */
+  --color-accent: #6c8aa3;
+  --color-accent-hover: #56748f;
+  --color-accent-soft: #e6edf2;
+  /* Texto/links pequeños que necesitan AA sobre bg. */
+  --color-accent-text: #46647b;
+  --color-preview-wash: rgba(108, 138, 163, 0.06);
+  --color-diff-old-wash: rgba(108, 138, 163, 0.16);
+  --color-diff-old-rule: #6c8aa3;
+  --color-diff-new-wash: rgba(181, 124, 74, 0.18);
+  --color-diff-new-rule: #a86a42;
+  /* Texto sobre relleno de acento. */
+  --color-on-accent: #ffffff;
+  /* Estado pulsado del botón primario. */
+  --color-accent-pressed: #3d586d;
+  --color-overlay: rgba(16, 24, 40, 0.32);
+
+  /* Selección */
+  --color-selection-bg: rgba(91, 124, 153, 0.08);
+  --color-selection-bar: #5b7c99;
+  /* Selección nativa de texto (contrasta con ink). */
+  --color-selection-text: #c9dbea;
+
+  /* Acentos pastel (light) */
+  --color-pastel-blue: #e6edf2;
+  --color-pastel-sage: #e6eee9;
+  --color-pastel-lavender: #eceaf2;
+  --color-pastel-butter: #f4efe1;
+  --color-pastel-pearl: #f3f4f2;
+
+  /* Post-it del editor: fondo, texto y cinta de la nota sobre documento vacío. */
+  --color-postit-bg: #f4efe1;
+  --color-postit-border: #e7dcc2;
+  --color-postit-ink: #202326;
+  --color-postit-ink-secondary: #485056;
+  --color-postit-tape: rgba(255, 255, 255, 0.55);
+
+  /* Semánticos */
+  --color-danger: #a34a3c;
+  --color-danger-soft: rgba(163, 74, 60, 0.1);
+  --color-success: #376a50;
+  --color-success-soft: rgba(55, 106, 80, 0.12);
+  --color-warning: #7d5f28;
+  --color-warning-soft: rgba(138, 106, 47, 0.12);
+
+  /* Espaciado (base 4) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --control-h-xs: 24px;
+  --control-h-sm: 28px;
+  --control-h-md: 32px;
+  --control-h-lg: 36px;
+
+  /* Radios */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --avatar-xl: 96px;
+
+  /* Elevación */
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-sheet: 0 1px 2px rgba(16, 24, 40, 0.04), 0 18px 48px rgba(16, 24, 40, 0.1);
+  --shadow-overlay: 0 12px 32px rgba(16, 24, 40, 0.12);
+  --shadow-postit: 0 10px 24px rgba(16, 24, 40, 0.12);
+  --shadow-float: 0 2px 6px rgba(16, 24, 40, 0.06), 0 18px 44px rgba(16, 24, 40, 0.12);
+  --shadow-bubble: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 10px rgba(16, 24, 40, 0.05);
+  --shadow-avatar: 0 8px 20px rgba(16, 24, 40, 0.16);
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-slow: 260ms;
+  --motion-enter: 220ms;
+  --motion-exit: 140ms;
+  --stagger-step: 34ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-organic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring-soft: cubic-bezier(0.22, 1.35, 0.36, 1);
+
+  /* Foco */
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-offset: 2px;
+  --focus-offset-inset: -2px;
+  --focus-offset-tight: 1px;
+
+  /* Tipografía */
+  --font-ui:
+    "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-prose:
+    "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-prose-newsreader: "Newsreader", Georgia, serif;
+  --font-prose-system:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --text-ui-xs: 12px;
+  --text-ui-sm: 13px;
+  --text-ui: 14px;
+  --text-ui-lg: 14px;
+  --text-prose: 16.5px;
+  --text-prose-line: 1.7;
+
+  /* Medidas del shell */
+  --rail-width: 56px;
+  --tree-width: 248px;
+  --agent-width: 380px;
+  --titlebar-height: 44px;
+  --header-height: 44px;
+  --selection-inset: 14px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Superficies */
+  --color-bg: #191b1d;
+  --color-surface: #202326;
+  --color-elevated: #262a2d;
+  --color-sunken: #151719;
+  --color-sheet: #1e2124;
+  /* Dark material stays low-luminance instead of mixing with a light surface. */
+  --color-chrome: rgba(25, 27, 29, 0.78);
+
+  /* Texto */
+  --color-ink: #eceef0;
+  --color-ink-secondary: #d5dade;
+  --color-muted: #bdc4ca;
+
+  /* Líneas */
+  --color-line: #30353a;
+  --color-chrome-edge: rgba(255, 255, 255, 0.12);
+  /* Bordes de control con ≥3:1 contra surface/bg (WCAG 1.4.11). */
+  --color-line-strong: #6f7880;
+
+  /* Acento */
+  --color-accent: #a9c0d2;
+  --color-accent-hover: #c7d8e4;
+  --color-accent-soft: rgba(169, 192, 210, 0.14);
+  --color-accent-text: #c7d8e4;
+  --color-preview-wash: rgba(169, 192, 210, 0.05);
+  --color-diff-old-wash: rgba(169, 192, 210, 0.18);
+  --color-diff-old-rule: #a9c0d2;
+  --color-diff-new-wash: rgba(224, 138, 122, 0.2);
+  --color-diff-new-rule: #e08a7a;
+  --color-on-accent: #202326;
+  --color-accent-pressed: #c7d8e4;
+  --color-overlay: rgba(0, 0, 0, 0.55);
+
+  /* Selección */
+  --color-selection-bg: rgba(169, 192, 210, 0.1);
+  --color-selection-bar: #a9c0d2;
+  --color-selection-text: #35506a;
+
+  /*
+   * Sin pasteles propios en dark: blue/lavender/butter/sage comparten el acento
+   * suave y pearl el hundido, para que las clases utilitarias no inventen tonos.
+   */
+  --color-pastel-blue: var(--color-accent-soft);
+  --color-pastel-sage: var(--color-accent-soft);
+  --color-pastel-lavender: var(--color-accent-soft);
+  --color-pastel-butter: var(--color-accent-soft);
+  --color-pastel-pearl: var(--color-sunken);
+
+  /* Post-it "mantequilla oscura": fondo cálido apagado y tinta clara. */
+  --color-postit-bg: #3b3423;
+  --color-postit-border: #5a4f35;
+  --color-postit-ink: #f2ead6;
+  --color-postit-ink-secondary: #d6ccb4;
+  --color-postit-tape: rgba(255, 255, 255, 0.18);
+
+  /* Semánticos */
+  --color-danger: #e08a7a;
+  --color-danger-soft: rgba(224, 138, 122, 0.14);
+  --color-success: #d9ecdf;
+  --color-success-soft: rgba(217, 236, 223, 0.14);
+  --color-warning: #d6b26a;
+  --color-warning-soft: rgba(214, 178, 106, 0.14);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.32);
+  --shadow-sheet: 0 18px 48px rgba(0, 0, 0, 0.45);
+  --shadow-overlay: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-postit: 0 10px 24px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 2px 6px rgba(0, 0, 0, 0.3), 0 18px 44px rgba(0, 0, 0, 0.5);
+  --shadow-bubble: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.32);
+  --shadow-avatar: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-slow: 0ms;
+    --motion-enter: 0ms;
+    --motion-exit: 0ms;
+    --stagger-step: 0ms;
+  }
+}

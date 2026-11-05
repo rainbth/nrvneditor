@@ -1,0 +1,65 @@
+import fs from "node:fs";
+import path from "node:path";
+import { expect, test } from "@playwright/test";
+
+test("UX access: floating reviewer picker and block actions", async ({ page }) => {
+  test.setTimeout(120_000);
+  const screenshots = path.join("artifacts", "screenshots");
+  fs.mkdirSync(screenshots, { recursive: true });
+  const screenshot = (name: string) => page.screenshot({ path: path.join(screenshots, name) });
+  await page.addInitScript(() => localStorage.clear());
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: /Abrir carpeta/ })
+    .first()
+    .click();
+  await page.locator('[role="treeitem"][data-path="guia-estilo.md"]').click();
+  await expect(page.getByTestId("audience-roster")).toHaveCount(0);
+  await expect(page.getByTestId("agent-audience")).toHaveCount(0);
+  const audienceChip = page.getByTestId("audience-chip");
+  await expect(audienceChip).toBeVisible();
+  await expect(page.getByText("Para quién escribo")).toBeVisible();
+  await screenshot("uiux-panel-audience.png");
+  await page.locator('.prose [data-block-type="paragraph"]').first().click();
+  const insert = page.getByTestId("insert-menu-trigger");
+  await expect(insert).toBeVisible();
+  await screenshot("uiux-block-plus.png");
+  await insert.click();
+  await expect(page.getByRole("menuitem", { name: "Párrafo" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.locator('.prose [data-block-type="paragraph"]').first().click({ button: "right" });
+  const context = page.getByTestId("block-context-menu");
+  await expect(context).toBeVisible();
+  await expect(context.getByText("Escribir", { exact: true })).toBeVisible();
+  await expect(context.getByText("Revisar", { exact: true })).toBeVisible();
+  await expect(context.getByText("Bloque", { exact: true })).toBeVisible();
+  await screenshot("uiux-context-menu.png");
+  await page.keyboard.press("Escape");
+  const trigger = page.getByTestId("bubble-review");
+  await trigger.click();
+  const picker = page.getByTestId("reviewer-picker");
+  await expect(picker).toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Elegir revisor" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("aria-modal", "true");
+  await expect(picker.getByText("Tono para:")).toHaveCount(0);
+  await expect(picker.locator(".reviewer-card")).toHaveCount(7);
+  await page.keyboard.press("Escape");
+  await expect(picker).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await expect(picker).toBeVisible();
+  const avatar = picker.locator(".reviewer-card .audience-avatar").first();
+  const box = await avatar.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box?.width).toBeCloseTo(96, 0);
+  expect(box?.height).toBeCloseTo(96, 0);
+  await expect(picker.locator(".reviewer-card-name").first()).toBeVisible();
+  const reviewer = picker.locator(".reviewer-card").first();
+  await reviewer.click();
+  await expect(picker.locator(".reviewer-lens-card")).toHaveCount(5);
+  await picker.locator('.reviewer-lens-card[data-lens="complete"]').click();
+  const reviewBubble = page.getByTestId("review-bubble");
+  await expect(reviewBubble).toBeVisible({ timeout: 30_000 });
+  await expect(reviewBubble.getByTestId("review-preview-fitting")).toHaveText("Ver recomendación");
+});

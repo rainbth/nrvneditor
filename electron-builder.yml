@@ -1,0 +1,40 @@
+appId: com.rainbrth.nrvn
+productName: nrvn
+directories:
+  output: release
+files:
+  - out/**/*
+  - package.json
+  - LICENSE
+extraResources:
+  - from: src/assets/fonts
+    to: fonts-licenses
+    filter:
+      - "OFL-*"
+  - from: README.md
+    to: README.md
+  - from: LICENSE
+    to: .
+  - from: NOTICE
+    to: .
+  - from: COPYRIGHT
+    to: .
+mac:
+  icon: build/icon.icns
+  target:
+    - target: dmg
+      arch:
+        - arm64
+  identity: null
+  category: public.app-category.productivity
+  hardenedRuntime: false
+  darkModeSupport: true
+dmg:
+  title: nrvn
+  artifactName: nrvn-${version}-${arch}.${ext}
+asar: true
+asarUnpack:
+  - node_modules/@opencode/**
+  - node_modules/effect/**
+  - "**/*.node"
+npmRebuild: false

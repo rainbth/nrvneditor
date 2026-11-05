@@ -1,0 +1,24 @@
+/*
+ * Fuentes empaquetadas (OFL-1.1). Sin CDN en runtime: los .woff2 viven en
+ * `src/assets/fonts/` y Vite los sirve como asset local.
+ *
+ * Lato se carga desde `@fontsource/lato` en `main.tsx` (400/700/400-italic).
+ * Inter y Newsreader se conservan como fallback y como opción de render,
+ * respectivamente.
+ */
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("../assets/fonts/Newsreader-Variable.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}

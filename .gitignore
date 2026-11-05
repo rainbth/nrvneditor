@@ -1,0 +1,20 @@
+node_modules
+out
+release
+artifacts
+test-results
+coverage
+.DS_Store
+*.log
+.env
+.env.local
+.playwright-mcp/
+
+# local debug artifacts
+/audit-light-selection.png
+/v110-*.png
+tests/e2e/tmp-debug*.spec.ts
+
+# stray artifacts
+/gif.png
+/working_gif.gif

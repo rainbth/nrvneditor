@@ -1,0 +1,328 @@
+/*
+ * Menús in-app (DropdownMenu y ContextMenu de Radix), disparadores compactos y
+ * piezas editoriales que acompañan al arranque con documento vacío.
+ * Sólo tokens de `tokens.css`: sin colores literales.
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Trigger compacto                                                           */
+/* -------------------------------------------------------------------------- */
+
+.menu-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 26px;
+  max-width: 100%;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--text-ui-sm);
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-app-region: no-drag;
+  transition:
+    background var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
+}
+.menu-trigger::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+}
+
+.menu-trigger:hover,
+.menu-trigger[data-state="open"] {
+  background: var(--color-elevated);
+  color: var(--color-ink);
+}
+.menu-trigger:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+.menu-trigger svg {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+}
+
+.menu-trigger-sm {
+  height: 26px;
+  width: 26px;
+  padding: 0;
+  justify-content: center;
+}
+
+/* Nombre del workspace dentro del trigger del árbol. */
+.tree-root-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.tree-header .menu-trigger {
+  flex: 1;
+  min-width: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Contenido                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.menu-content {
+  z-index: var(--z-menu);
+  min-width: 220px;
+  padding: var(--space-1);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+  font-family: var(--font-ui);
+  color: var(--color-ink);
+  transform-origin: var(
+    --radix-dropdown-menu-content-transform-origin,
+    var(--radix-context-menu-content-transform-origin, top left)
+  );
+}
+
+.menu-content[data-state="open"] {
+  animation: menu-in var(--motion-enter) var(--ease-spring-soft);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-h-md);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-ui-sm);
+  color: var(--color-ink);
+  cursor: default;
+  user-select: none;
+  outline: none;
+  transition:
+    background var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-spring);
+}
+.menu-item:active:not([data-disabled]) {
+  background: var(--color-accent-soft);
+}
+
+.menu-item[data-highlighted] {
+  background: var(--color-elevated);
+  transform: translateX(1px);
+}
+
+.menu-item[data-disabled] {
+  color: var(--color-muted);
+  cursor: default;
+}
+
+.menu-item[data-tone="danger"] {
+  color: var(--color-danger);
+}
+
+.menu-item[data-tone="danger"][data-highlighted] {
+  background: var(--color-danger-soft);
+}
+
+.menu-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 15px;
+  width: 15px;
+  height: 15px;
+  color: var(--color-muted);
+}
+
+.menu-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.menu-item[data-tone="danger"] .menu-icon {
+  color: inherit;
+}
+
+.menu-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-shortcut {
+  margin-left: auto;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-ui-xs);
+  letter-spacing: 0.02em;
+}
+
+.menu-separator {
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--color-line);
+}
+
+.menu-label {
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--text-ui-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.menu-personas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  padding: var(--space-1);
+}
+
+.menu-item.menu-persona {
+  height: auto;
+  min-height: 60px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6px;
+  gap: 4px;
+}
+
+.menu-persona-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.menu-persona-hint {
+  margin: 0;
+  padding: 0 var(--space-2) var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--text-ui-xs);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-content[data-state="open"] {
+    animation: none;
+  }
+  .menu-item {
+    transition: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Documento vacío                                                            */
+/* -------------------------------------------------------------------------- */
+
+.empty-document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 100%;
+  padding: var(--space-9) var(--space-6);
+  text-align: center;
+}
+
+.empty-document-title {
+  font-family: var(--font-prose);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.empty-document-copy {
+  max-width: 40ch;
+  color: var(--color-muted);
+  font-size: var(--text-ui-sm);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Contexto de selección                                                      */
+/* -------------------------------------------------------------------------- */
+
+.context-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.context-preview-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.context-preview-label {
+  color: var(--color-muted);
+  font-size: var(--text-ui-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.context-preview-text {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--color-ink);
+  font-size: var(--text-ui-sm);
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.context-details {
+  margin-top: var(--space-1);
+}
+
+.context-details > summary {
+  color: var(--color-muted);
+  font-size: var(--text-ui-xs);
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.context-details > summary:hover {
+  color: var(--color-ink);
+}
+
+.context-details .context-keys {
+  margin-top: var(--space-2);
+}
+
+.context-lines {
+  margin-left: var(--space-2);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-ui-xs);
+}
