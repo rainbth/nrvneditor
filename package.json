@@ -69,5 +69,8 @@
     "typescript": "*",
     "vite": "*",
     "vitest": "*"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }
