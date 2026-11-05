@@ -106,12 +106,21 @@ test("S1 page presets, responsive canvas and resizable tree/outline", async ({ p
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
-    const sheetBox = await sheet.boundingBox();
-    const areaBox = await page.locator(".document-area").boundingBox();
-    expect(sheetBox && areaBox && sheetBox.x - areaBox.x).toBeGreaterThanOrEqual(31);
-    expect(
-      sheetBox && areaBox && areaBox.x + areaBox.width - sheetBox.x - sheetBox.width,
-    ).toBeGreaterThanOrEqual(31);
+    // El panel derecho se anima al abrirse: se espera a que el layout se estabilice.
+    await expect
+      .poll(
+        async () => {
+          const sheetBox = await sheet.boundingBox();
+          const areaBox = await page.locator(".document-area").boundingBox();
+          if (!sheetBox || !areaBox) return -Infinity;
+          return Math.min(
+            sheetBox.x - areaBox.x,
+            areaBox.x + areaBox.width - sheetBox.x - sheetBox.width,
+          );
+        },
+        { timeout: 5_000 },
+      )
+      .toBeGreaterThanOrEqual(31);
   };
   await responsive();
 

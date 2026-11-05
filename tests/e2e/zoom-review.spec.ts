@@ -228,23 +228,30 @@ test("zoom recalcula toolbar de formato, gutter y + flotante", async ({ page }) 
     if (!toolbarBox) throw new Error("No se pudo medir el toolbar abierto");
     expect(toolbarBox.y).toBeGreaterThanOrEqual(0);
     expect(toolbarBox.y + toolbarBox.height).toBeLessThanOrEqual(900);
-    const overlappingBlocks = await page.evaluate(() => {
-      const toolbarElement = document.querySelector<HTMLElement>("[data-testid=format-toolbar]");
-      if (!toolbarElement) throw new Error("No se encontró el toolbar de formato");
-      const toolbarRect = toolbarElement.getBoundingClientRect();
-      return [...document.querySelectorAll<HTMLElement>(".prose .block")]
-        .filter((block) => {
-          const rect = block.getBoundingClientRect();
-          return (
-            toolbarRect.left < rect.right &&
-            toolbarRect.right > rect.left &&
-            toolbarRect.top < rect.bottom &&
-            toolbarRect.bottom > rect.top
-          );
-        })
-        .map((block) => block.dataset.blockKey);
-    });
-    expect(overlappingBlocks).toEqual([]);
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => {
+            const toolbarElement = document.querySelector<HTMLElement>(
+              "[data-testid=format-toolbar]",
+            );
+            if (!toolbarElement) throw new Error("No se encontró el toolbar de formato");
+            const toolbarRect = toolbarElement.getBoundingClientRect();
+            return [...document.querySelectorAll<HTMLElement>(".prose .block")]
+              .filter((block) => {
+                const rect = block.getBoundingClientRect();
+                return (
+                  toolbarRect.left < rect.right &&
+                  toolbarRect.right > rect.left &&
+                  toolbarRect.top < rect.bottom &&
+                  toolbarRect.bottom > rect.top
+                );
+              })
+              .map((block) => block.dataset.blockKey);
+          }),
+        { timeout: 5_000 },
+      )
+      .toEqual([]);
     await page.screenshot({ path: `${SHOTS}/format-toolbar-${zoom}.png` });
   }
 
